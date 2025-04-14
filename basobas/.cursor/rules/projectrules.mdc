@@ -1,0 +1,211 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+<!-- 
+📌 NOTE:
+This is an example project structure only. 
+Designed for a clean, scalable, and maintainable setup using **Next.js 15**.
+
+🚀 Framework: Next.js 15 with App Router
+
+🎨 Tailwind CSS (Latest):
+- `tailwind.config.js` is not used.
+- To define theme colors, use the `@theme` directive in `globals.css`.
+
+🖌️ Example:
+@theme {
+  --color-primary: #E63946;
+  --color-secondary: #1D3557;
+}
+-->
+
+---
+
+## 🧩 Project Structure
+
+```
+src/
+├── app/
+│   ├── (auth)/                      → Public pages (login, signup)
+│   ├── (dashboard)/                → Protected routes
+│   └── layout.tsx                  → Root layout
+├── components/
+│   ├── atoms/                      → Stateless UI (Input, Button)
+│   ├── molecules/                  → Combos like Label + Input + Error
+│   └── layout/                     → Global reusable layouts (e.g., AuthLayout)
+├── features/
+│   ├── auth/                       → Feature-specific logic
+│   │   ├── components/             → Atomic structure: atoms, molecules, organisms
+│   │   ├── layout/                 → Feature layout if needed only
+│   │   ├── context/                → Local context for auth
+│   │   ├── hooks/                  → `useLogin`, `useSignup` (React Query based)
+│   │   ├── services/               → Business logic layer (validates, transforms, handles DTO)
+│   │   ├── api/                    → API calls using Axios
+│   │   ├── repository/             → Optional repo layer for data abstraction
+│   │   └── model/                  → Types/interfaces for request/response
+│   └── dashboard/                  → Similar setup for another domain
+├── contexts/                       → Global context providers (Auth, Theme, Toast)
+├── dto/                            → Shared DTOs (LoginRequest, SignupRequest, etc.)
+├── hooks/                          → Global reusable hooks (e.g., useDebounce, useClickOutside)
+├── constants/                      → Shared constants (colors, regex, form messages)
+├── routes/                         → Route mapping constants (e.g., `ROUTES.LOGIN`)
+├── styles/
+│   └── globals.css                 → Contains `@theme` variables (Tailwind CSS v3+)
+├── utils/                          → Pure utility functions (e.g., validation, formatting)
+├── types/                          → Shared app-wide types/interfaces
+├── data/                           → Optional: static data, dropdowns, locales, etc.
+public/
+└── assets/
+    └── logo/
+        └── basobas-logo.png        → Branding image
+
+
+---
+
+## ⚛️ Atomic Design Rules
+
+### `components/atoms/`
+- Stateless, hook-free
+- Fully reusable via props
+- Example: `Button`, `Input`, `Label`, `Text`
+
+### `components/molecules/`
+- Group atoms into small units (like `LabeledInput`, `SearchBox`)
+- Still stateless & logic-free
+
+### `components/organisms/`
+- Can contain basic logic (event handling, local state)
+- Example: Auth form, Card with CTA
+
+### 🔒 Strict Rule:
+> ❌ Never use hooks, context, state in atoms or molecules.
+
+---
+
+## 🧩 Context Strategy
+
+### 🔹 Local (Feature-based) Context
+- Lives in `features/<feature>/context/`
+- Only used in that feature
+- Keeps isolation and reduces tight coupling
+
+### 🔹 Global Context
+- Stored in `contexts/`
+- Includes things like `AuthContext`, `ThemeContext`, `ToastContext`
+- Wrapped in root layout
+
+```tsx
+<ThemeProvider>
+  <AuthProvider>
+    <ToastProvider>
+      {children}
+    </ToastProvider>
+  </AuthProvider>
+</ThemeProvider>
+```
+
+---
+
+## 🔁 Data Flow (React Query + CSR)
+
+✅ All client-side data operations follow this **strict pipeline**:
+
+```
+API → services/ → react-query custom hook → page/component/layout
+```
+
+- `api/` → configures axios/fetch
+- `services/` → formats DTOs, central place for logic
+- `hooks/` → custom React Query hooks (e.g. `useGetJobs`)
+- Consumed only in pages/layouts — never in atoms/molecules
+
+> ❗Maintain separation between data logic and view.
+
+---
+
+## 🎨 Tailwind in Next.js 15
+
+- No `tailwind.config.js`
+- Use `@theme` in `globals.css`:
+
+```css
+@theme {
+  --color-primary: #E63946;
+  --color-secondary: #1D3557;
+}
+```
+
+- Apply with Tailwind utilities:
+```html
+<div class="bg-[var(--color-primary)] text-white">
+```
+
+---
+
+## ✍️ Function, Components & Method Commenting Practice
+
+Every function must include a block comment:
+- What the function does
+- Parameters with types
+- Return type & purpose
+
+```ts
+/**
+ * Validates user email format
+ * @param email - Email string to validate
+ * @returns boolean - true if valid, false if invalid
+ */
+export const validateEmail = (email: string): boolean => {
+  const regex = /^[\w.-]+@[\w.-]+\.\w+$/;
+  return regex.test(email);
+};
+```
+
+---
+
+✅ Additional Key Implementation Rules
+Ensure Responsive Design Across All Devices
+
+All components must be fully responsive and mobile-first using Tailwind utility classes.
+
+Layouts and forms should gracefully adapt from mobile → tablet → desktop.
+
+Support Both Light and Dark Themes
+
+Use Tailwind’s dark: class strategy.
+
+Respect system preferences and dynamically adapt using ThemeContext.
+
+Use color variables defined in @theme (e.g., bg-[var(--color-primary)]) to maintain consistency across themes.
+
+Optimize Render Performance and User Experience
+
+Use useCallback, useMemo, and React.memo() appropriately to prevent unnecessary re-renders.
+
+Add smooth, meaningful animations using Tailwind’s transition, duration, and ease classes (e.g., form shake on error, button press animation).
+
+Keep state localized where necessary; avoid prop-drilling.
+
+
+## 💡 Summary
+
+| Layer               | Rules & Notes |
+|---------------------|---------------|
+| Atoms/Molecules     | Stateless, reusable, no hooks or context |
+| Organisms           | Can contain basic state/logic, but not heavy logic |
+| Templates (Optional)| Pure structure/layout, no logic |
+| Features            | Self-contained: api, services, hooks, context, components |
+| Global Context      | Theme, Auth, Toast → in `contexts/` |
+| Global Hooks        | Shared utilities → `hooks/` |
+| React Query Flow    | api → services → hook → used in page only |
+| Tailwind CSS        | Use `@theme` in globals.css only |
+| Commenting Standard | Every function must have doc-comment |
+
+---
+
+

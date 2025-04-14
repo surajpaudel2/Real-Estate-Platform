@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfcfc; /* Soft near-white */
+  --foreground: #1e1b1e; /* Deep neutral text */
+  --color-primary: #a46a7c; /* Mauve/Pinkish-brown */
+  --color-secondary: #7e3a4f; /* Deeper shade */
+  --color-accent: #d98caa; /* Light rose accent */
+  --color-light: #f4f4f5;
+  --color-success: #15803d;
+  --color-warning: #ca8a04;
+  --color-error: #b91c1c;
+  --color-gray-800: #3d3d3d;
+  --form-bg: #ffffff;
+  --form-border: #e4e4e7;
 }
 
 @theme inline {
@@ -12,15 +22,120 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode via class */
+.dark {
+  --background: #121214; /* Near-black, elegant */
+  --foreground: #e6dbe0; /* Soft dusty white */
+  --color-primary: #b47887; /* Dusty rose, inspired by logo */
+  --color-secondary: #9c4f64; /* Deeper mauve */
+  --color-accent: #db95a7; /* Blush pink */
+  --color-light: #1f1f22;
+  --color-success: #22c55e;
+  --color-warning: #eab308;
+  --color-error: #ef4444;
+  --color-gray-800: #3f3f46;
+  --form-bg: #1f1f22;
+  --form-border: #3f3f46;
+}
+
+/* For initial system preference before JS loads */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not(.light) {
+    --background: #0d0d11;
+    --foreground: #e6e6e9;
+    --color-primary: #7f5af0;
+    --color-secondary: #2cb67d;
+    --color-accent: #fca311;
+    --color-light: #1a1a1d;
+    --color-success: #22c55e;
+    --color-warning: #facc15;
+    --color-error: #ef4444;
+    --color-gray-800: #27272a;
+    --form-bg: #27272a;
+    --form-border: #374151;
   }
+}
+
+/* Add transitions for smooth theme switching */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: var(--transition-normal);
+  transition-timing-function: ease-in-out;
+}
+
+/* Some elements should not transition */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* Fast transitions for interactive elements */
+button,
+a,
+input,
+select,
+textarea {
+  transition-duration: var(--transition-fast);
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+}
+
+/* Add this to help with debugging */
+.theme-debug {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  padding: 8px;
+  background: var(--color-light);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  font-size: 10px;
+  z-index: 9999;
 }
