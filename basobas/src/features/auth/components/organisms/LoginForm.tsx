@@ -9,12 +9,13 @@ import Input from "@/components/atoms/Input";
 import Button from "@/components/atoms/Button";
 import PasswordInput from "@/components/molecules/PasswordInput";
 import { LoginRequest } from "@/dto/LoginRequest";
-import { useLogin } from "../hooks/useLogin";
-import GoogleIcon from "./atoms/GoogleIcon";
-import SignInIcon from "./atoms/SignInIcon";
-import LockIcon from "./atoms/LockIcon";
-import EmailIcon from "./atoms/EmailIcon";
-import FormRedirectLinks from "./atoms/FormRedirectLinks";
+import { useLogin } from "../../hooks/useLogin";
+import GoogleIcon from "../atoms/GoogleIcon";
+import SignInIcon from "../atoms/SignInIcon";
+import LockIcon from "../atoms/LockIcon";
+import EmailIcon from "../atoms/EmailIcon";
+import FormRedirectLinks from "../atoms/FormRedirectLinks";
+import ContinueWith from "../atoms/ContinueWith";
 
 /**
  * Login form validation schema
@@ -71,22 +72,12 @@ const LoginForm: React.FC = () => {
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-[var(--color-foreground)]"
-          >
-            Password
-          </label>
-        </div>
-        <div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10">
-            <LockIcon />
-          </div>
+        <div className="flex items-center justify-between">
           <PasswordInput
+            label="Password"
             id="password"
             placeholder="••••••••"
-            className="pl-10 mt-1"
+            leftIcon={<LockIcon />}
             {...register("password")}
             error={errors.password?.message}
           />
@@ -129,18 +120,6 @@ const LoginForm: React.FC = () => {
 
       <FormRedirectLinks isLogin={true} />
     </form>
-  );
-};
-
-const ContinueWith: React.FC = () => {
-  return (
-    <div className="relative flex items-center py-2">
-      <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-      <span className="mx-4 flex-shrink text-xs text-gray-500 dark:text-gray-400">
-        or continue with
-      </span>
-      <div className="flex-grow border-t border-gray-300 dark:border-gray-700"></div>
-    </div>
   );
 };
 

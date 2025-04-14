@@ -2,7 +2,7 @@
 
 import React from "react";
 import AuthLayout from "@/components/layout/AuthLayout";
-import SignupForm from "@/features/auth/components/SignupForm";
+import SignupForm from "@/features/auth/components/organisms/SignupForm";
 import { AUTH_TEXT } from "@/constants/authText";
 
 /**

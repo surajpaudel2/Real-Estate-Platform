@@ -4,25 +4,26 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Link from "next/link";
 import Input from "@/components/atoms/Input";
 import Button from "@/components/atoms/Button";
 import PasswordInput from "@/components/molecules/PasswordInput";
 import PasswordChecklist from "@/components/molecules/PasswordChecklist";
 import PasswordStrengthBar from "@/components/molecules/PasswordStrengthBar";
 import { SignupRequest } from "@/dto/SignupRequest";
-import { useSignup } from "../hooks/useSignup";
+import { useSignup } from "../../hooks/useSignup";
 import {
   evaluatePasswordRules,
   calculatePasswordStrength,
 } from "@/utils/validation";
 import { PasswordRules } from "@/components/molecules/PasswordChecklist";
 import { PasswordStrength } from "@/components/molecules/PasswordStrengthBar";
-import UserPlusIcon from "./atoms/UserPlusIcon";
-import LockIcon from "./atoms/LockIcon";
-import EmailIcon from "./atoms/EmailIcon";
-import UserIcon from "./atoms/UserIcon";
-import FormRedirectLinks from "./atoms/FormRedirectLinks";
+import UserPlusIcon from "../atoms/UserPlusIcon";
+import LockIcon from "../atoms/LockIcon";
+import EmailIcon from "../atoms/EmailIcon";
+import UserIcon from "../atoms/UserIcon";
+import FormRedirectLinks from "../atoms/FormRedirectLinks";
+import ContinueWith from "../atoms/ContinueWith";
+import GoogleIcon from "../atoms/GoogleIcon";
 
 /**
  * Signup form validation schema
@@ -106,6 +107,10 @@ const SignupForm: React.FC = () => {
     signup(data);
   };
 
+  const handleGoogleLogin = () => {
+    console.log("Google login");
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -134,24 +139,14 @@ const SignupForm: React.FC = () => {
       </div>
 
       <div>
-        <label
-          htmlFor="password"
-          className="block mb-1 text-sm font-medium text-[var(--color-foreground)]"
-        >
-          Password
-        </label>
-        <div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10">
-            <LockIcon />
-          </div>
-          <PasswordInput
-            id="password"
-            placeholder="••••••••"
-            className="pl-10"
-            {...register("password")}
-            error={errors.password?.message}
-          />
-        </div>
+        <PasswordInput
+          label="Password"
+          id="password"
+          placeholder="••••••••"
+          leftIcon={<LockIcon />}
+          {...register("password")}
+          error={errors.password?.message}
+        />
 
         {/* Password strength indicators only show when user starts typing */}
         {password && (
@@ -167,24 +162,14 @@ const SignupForm: React.FC = () => {
       </div>
 
       <div>
-        <label
-          htmlFor="confirmPassword"
-          className="block mb-1 text-sm font-medium text-[var(--color-foreground)]"
-        >
-          Confirm Password
-        </label>
-        <div className="relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10">
-            <LockIcon />
-          </div>
-          <PasswordInput
-            id="confirmPassword"
-            placeholder="••••••••"
-            className="pl-10"
-            {...register("confirmPassword")}
-            error={errors.confirmPassword?.message}
-          />
-        </div>
+        <PasswordInput
+          label="Confirm Password"
+          id="confirmPassword"
+          placeholder="••••••••"
+          leftIcon={<LockIcon />}
+          {...register("confirmPassword")}
+          error={errors.confirmPassword?.message}
+        />
       </div>
 
       <div className="pt-4">
@@ -198,14 +183,23 @@ const SignupForm: React.FC = () => {
           Create Account
         </Button>
       </div>
+      <ContinueWith />
+      <div>
+        <Button
+          type="button"
+          variant="outline"
+          fullWidth
+          onClick={handleGoogleLogin}
+          leftIcon={<GoogleIcon />}
+          className="transition-transform active:scale-[0.98]"
+        >
+          Continue with Google
+        </Button>
+      </div>
 
       <FormRedirectLinks isLogin={false} />
     </form>
   );
 };
-
-// Form icons
-
-// Add new UserPlusIcon
 
 export default SignupForm;

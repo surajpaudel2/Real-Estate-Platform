@@ -2,7 +2,7 @@
 
 import React from "react";
 import AuthLayout from "@/components/layout/AuthLayout";
-import LoginForm from "@/features/auth/components/LoginForm";
+import LoginForm from "@/features/auth/components/organisms/LoginForm";
 import { AUTH_TEXT } from "@/constants/authText";
 
 /**

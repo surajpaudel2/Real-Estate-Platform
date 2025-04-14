@@ -8,6 +8,14 @@ interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   /** Error state with optional message */
   error?: string | boolean;
+  /** Optional label for the input */
+  label?: string;
+  /** Optional tooltip for the label */
+  tooltip?: string;
+  /** Optional left icon */
+  leftIcon?: React.ReactNode;
+  /** Use floating label style */
+  floatingLabel?: boolean;
 }
 
 /**
@@ -15,7 +23,17 @@ interface PasswordInputProps
  * Molecule component combining Input with password visibility toggle
  */
 const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ className = "", ...props }, ref) => {
+  (
+    {
+      className = "",
+      label,
+      tooltip,
+      leftIcon,
+      floatingLabel = false,
+      ...props
+    },
+    ref
+  ) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordVisibility = () => {
@@ -23,40 +41,42 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     };
 
     return (
-      <div className="relative">
-        <Input
-          type={showPassword ? "text" : "password"}
-          ref={ref}
-          className={className}
-          rightIcon={
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="flex items-center justify-center text-gray-500 hover:text-[var(--color-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 rounded transition-colors duration-200"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              suppressHydrationWarning
-            >
-              <div className="relative w-5 h-5 flex items-center justify-center">
-                <span
-                  className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
-                    showPassword ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <EyeOffIcon className="h-5 w-5" />
-                </span>
-                <span
-                  className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
-                    showPassword ? "opacity-0" : "opacity-100"
-                  }`}
-                >
-                  <EyeIcon className="h-5 w-5" />
-                </span>
-              </div>
-            </button>
-          }
-          {...props}
-        />
-      </div>
+      <Input
+        type={showPassword ? "text" : "password"}
+        ref={ref}
+        className={className}
+        label={label}
+        tooltip={tooltip}
+        leftIcon={leftIcon}
+        floatingLabel={floatingLabel}
+        rightIcon={
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="flex items-center justify-center text-gray-500 hover:text-[var(--color-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 rounded transition-colors duration-200 cursor-pointer"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            suppressHydrationWarning
+          >
+            <div className="relative w-5 h-5 flex items-center justify-center">
+              <span
+                className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
+                  showPassword ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <EyeOffIcon className="h-5 w-5" />
+              </span>
+              <span
+                className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
+                  showPassword ? "opacity-0" : "opacity-100"
+                }`}
+              >
+                <EyeIcon className="h-5 w-5" />
+              </span>
+            </div>
+          </button>
+        }
+        {...props}
+      />
     );
   }
 );
